@@ -47,6 +47,7 @@ function generateManifest(projectRoot, platform, hotUpdateUrl) {
     _readDir(path.join(source, "assets/main"), manifest.assets, source);
     _readDir(path.join(source, "assets/internal"), manifest.assets, source);
     _readDir(path.join(source, "assets/resources"), manifest.assets, source);
+    _readFile(path.join(source, "main.js"), manifest.assets, source);
 
     // manifest写入路径
     let targetProjectManifest = path.join(source, "assets/main", "project.manifest");
@@ -125,7 +126,7 @@ function _readDir(dir, obj, source) {
         else if (stat.isFile()) {
             size = stat['size']; // Size in Bytes
             md5 = crypto.createHash('md5').update(fs.readFileSync(subpath)).digest('hex');
-            compressed = path.extname(subpath).toLowerCase() === '.zip';
+            compressed = path.extname(subpath).toLowerCase() === '.zip';            
 
             relative = path.relative(source, subpath);
             relative = relative.replace(/\\/g, '/');
@@ -139,6 +140,28 @@ function _readDir(dir, obj, source) {
             if (compressed) {
                 obj[relative].compressed = true;
             }
+        }
+    }
+}
+
+function _readFile(dir, obj, source) {
+	var stat = fs.statSync(dir);    
+    if (stat.isFile()) {
+        size = stat['size']; // Size in Bytes
+        md5 = crypto.createHash('md5').update(fs.readFileSync(dir)).digest('hex');
+        compressed = path.extname(dir).toLowerCase() === '.zip';        
+
+        relative = path.relative(source, dir);
+        relative = relative.replace(/\\/g, '/');
+        relative = encodeURI(relative);
+
+        obj[relative] = {
+            'size': size,
+            'md5': md5
+        };
+
+        if (compressed) {
+            obj[relative].compressed = true;
         }
     }
 }
