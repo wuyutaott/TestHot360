@@ -1,0 +1,18 @@
+{
+	"main": {
+		"log": "更新资源",
+		"ver": "1.00.000"
+	},
+	"game1": {		
+		"ver": "1.00.000",
+		"includeApk": true
+	},
+	"game2": {		
+		"ver": "1.00.000",
+		"includeApk": false	
+	},
+	"game3": {		
+		"ver": "1.00.000",
+		"includeApk": false
+	}
+}

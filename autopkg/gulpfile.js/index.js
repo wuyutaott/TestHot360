@@ -24,4 +24,9 @@ gulp.task('task2', function(cb) {
 
 gulp.task('win32', gulp.series('cocoscreatorPublishWin32', 'task2'));
 
+gulp.task('genManifest', function(cb) {
+	tools.generateManifest('D:\\test\\TestHot360', 'windows', 'http://127.0.0.1');
+	cb();
+});
+
 
