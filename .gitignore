@@ -22,3 +22,5 @@ node_modules/
 # WebStorm
 #//////////////////////////
 .idea/
+autopkg/gulpfile.js/publish.log
+autopkg/gulpfile.js/.config
