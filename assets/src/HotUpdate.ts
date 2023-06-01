@@ -14,18 +14,18 @@ export default class HotUpdate extends EventTarget {
         return this._am;
     }   
 
-    private verifyCallback(path: string, asset: jsb.ManifestAsset): boolean {
+    private verifyCallback(path: string, asset: native.ManifestAsset): boolean {
         return true;
     }
 
-    private cb: (name: string, event: jsb.EventAssetsManager) => void;
+    private cb: (name: string, event: native.EventAssetsManager) => void;
 
     /**
      * 构造函数
      * @param name 模块名字，大厅用'main'，子游戏用各自的bundle名称          
      * @param cb 事件回调     
      */
-    constructor(name: string, cb: (name: string, event: jsb.EventAssetsManager) => void) {
+    constructor(name: string, cb: (name: string, event: native.EventAssetsManager) => void) {
         super();        
         if (!sys.isNative) {
             return;
@@ -92,7 +92,7 @@ export default class HotUpdate extends EventTarget {
     /**
      * 事件回调
      */
-    private eventCb(event: jsb.EventAssetsManager) {
+    private eventCb(event: native.EventAssetsManager) {
         // console.log("HotUpdate eventCb: code -> " + event.getEventCode() + " msg -> " + this.getEventStr(event.getEventCode()));
         let isUpdateFinished = false;
         switch (event.getEventCode()) {
