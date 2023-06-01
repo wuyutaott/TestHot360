@@ -32,5 +32,34 @@ export class Tools {
             return localVersion;
         }
     }
+
+    /**
+     * 版本号对比
+     * @param versionA 
+     * @param versionB 
+     * a > b 结果 > 0
+     * a < b 结果 < 0
+     * a = b 结果 = 0
+     */
+    static versionCompare(versionA: string, versionB: string): number {
+        var vA = versionA.split('.');
+        var vB = versionB.split('.');
+        for (var i = 0; i < vA.length; ++i) {
+            var a = parseInt(vA[i]);
+            var b = parseInt(vB[i]);
+            if (a === b) {
+                continue;
+            }
+            else {
+                return a - b;
+            }
+        }
+        if (vB.length > vA.length) {
+            return -1;
+        }
+        else {
+            return 0;
+        }
+    }
 }
 

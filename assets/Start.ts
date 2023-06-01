@@ -1,4 +1,4 @@
-import { _decorator, Component, native, Node, sys } from 'cc';
+import { _decorator, Component, director, native, Node, sys } from 'cc';
 import { Tools } from './src/Tools';
 import Http from './src/Http';
 const { ccclass, property } = _decorator;
@@ -9,10 +9,20 @@ export class Main extends Component {
         if (sys.isNative) {
             let path = native.fileUtils.getWritablePath();
             console.log('WritablePath = ', path);
+
+            let changelog = await this.reqChangeLog();
+            let updateFlag = this.checkHotUpdate('main', changelog);
+            if (updateFlag) {
+                // 需要更新大厅
+                console.log('update lobby...');
+            } else {
+                // 已经是最新版本
+                director.loadScene('Lobby');
+            }
         }
-        
-        let changelog = await this.reqChangeLog();
-        this.checkHotUpdate('main', changelog);
+        else {
+            director.loadScene('Lobby');
+        }
     }
 
     // 请求changelog
@@ -33,12 +43,13 @@ export class Main extends Component {
     // 检测是否需要热更新
     checkHotUpdate(module: string, changelog): boolean {
         let m = changelog[module];
-        console.log(`${module}.remoteVersion = ${m.ver}`);
+        let remoteVersion = m.ver;
+        console.log(`${module}.remoteVersion = ${remoteVersion}`);
 
         let localVersion = Tools.getLocalVersion(module);
         console.log(`${module}.localVersion = ${localVersion}`);
 
-        return false;
+        return Tools.versionCompare(remoteVersion, localVersion) > 0;
     }
 }
 
