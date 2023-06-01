@@ -23,14 +23,23 @@ gulp.task('genManifest', function(cb) {
 	cb();
 });
 
-// 资源部署
-gulp.task('copy', function() {
+// 资源部署 - nginx
+gulp.task('copy2Nginx', function() {
   return gulp.src('D:/test/TestHot360/build/windows/assets/**')
     .pipe(gulp.dest('D:/htdoc/assets'));
 });
 
+// 资源部署 - win debug
+gulp.task('copy2WinDebug', function() {
+  return gulp.src('D:/test/TestHot360/build/windows/assets/**')
+    .pipe(gulp.dest('D:/test/TestHot360/build/windows/proj/Debug/Resources'));
+});
+
 // 一键发布热更新
-gulp.task('publishUpdate', gulp.series('publishWin32', 'genManifest', 'copy'));
+gulp.task('publishUpdate', gulp.series('publishWin32', 'genManifest', 'copy2Nginx'));
+
+// 一键发布到Win Debug
+gulp.task('win32', gulp.series('publishWin32', 'genManifest', 'copy2WinDebug'));
 
 
 
