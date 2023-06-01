@@ -1,0 +1,1 @@
+export let HOT_UPDATE_ADDR = 'http://127.0.0.1/assets';                   // 游戏热更新地址
