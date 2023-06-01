@@ -29,6 +29,12 @@ gulp.task('copy2Nginx', function() {
     .pipe(gulp.dest('D:/htdoc/assets'));
 });
 
+// 拷贝changelog.json - nginx
+gulp.task('copyChangeLog', function() {
+  return gulp.src('D:/test/TestHot360/changelog.json')
+    .pipe(gulp.dest('D:/htdoc/assets'));
+});
+
 // 资源部署 - win debug
 gulp.task('copy2WinDebug', function() {
   return gulp.src('D:/test/TestHot360/build/windows/assets/**')
@@ -36,7 +42,7 @@ gulp.task('copy2WinDebug', function() {
 });
 
 // 一键发布热更新
-gulp.task('publishUpdate', gulp.series('publishWin32', 'genManifest', 'copy2Nginx'));
+gulp.task('publishUpdate', gulp.series('publishWin32', 'genManifest', 'copy2Nginx', 'copyChangeLog'));
 
 // 一键发布到Win Debug
 gulp.task('win32', gulp.series('publishWin32', 'genManifest', 'copy2WinDebug'));

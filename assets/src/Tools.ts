@@ -1,7 +1,7 @@
 import { native, sys } from "cc";
 
 export class Tools {
-    static getVersion(name: string): string {
+    static getLocalVersion(name: string): string {
         if (!sys.isNative)
             return "";
 
@@ -22,13 +22,13 @@ export class Tools {
             cacheVersion = json.version;
         }
 
-        if (cacheVersion != '') {
-            console.log('读取缓存版本', name, cacheVersion);
+        if (cacheVersion != '') {            
+            // 读取缓存版本
             return cacheVersion;
         }
 
         if (localVersion != '') {
-            console.log('读取内置版本', name, localVersion);
+            // 读取内置版本
             return localVersion;
         }
     }
