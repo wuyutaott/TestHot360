@@ -1,4 +1,4 @@
-import { native, sys } from "cc";
+import { game, native, sys } from "cc";
 import { HOT_UPDATE_ADDR } from "./Define";
 import { Tools } from "./Tools";
 
@@ -92,16 +92,19 @@ export default class HotUpdate extends EventTarget {
     /**
      * 事件回调
      */
-    private eventCb(event: native.EventAssetsManager) {
-        // console.log("HotUpdate eventCb: code -> " + event.getEventCode() + " msg -> " + this.getEventStr(event.getEventCode()));
-        let isUpdateFinished = false;
+    private eventCb(event: native.EventAssetsManager) {                
+        var needRestart = false;
+        var failed = false;
         switch (event.getEventCode()) {
             case native.EventAssetsManager.ERROR_NO_LOCAL_MANIFEST:
             case native.EventAssetsManager.ERROR_DOWNLOAD_MANIFEST:
             case native.EventAssetsManager.ERROR_PARSE_MANIFEST:
             case native.EventAssetsManager.ALREADY_UP_TO_DATE:
+                failed = true;                
+                this.cb(this._name, event);
+                break;
             case native.EventAssetsManager.UPDATE_FINISHED:
-                isUpdateFinished = true;
+                needRestart = true;
                 this._updating = false;
                 this.cb(this._name, event);
                 break;
@@ -134,18 +137,29 @@ export default class HotUpdate extends EventTarget {
                 break;
         }
 
-        if (isUpdateFinished) {
-            console.log("[update] finish!");
-            // 获取当前搜索路径，AssetsManagerEx会修改搜索路径
-            let searchPaths: string[] = native.fileUtils.getSearchPaths();
-            // 搜索路径去重
-            let obj = {};
-            for (let i = 0; i < searchPaths.length; i++) {
-                obj[searchPaths[i]] = true;
-            }
-            searchPaths = Object.keys(obj);
-            // 保存搜索路径
-            // StorageUtil.Ins.write(EStorageKey.HotUpdateSearchPaths, searchPaths);
+        if (failed) {
+            this._am.setEventCallback(null!);
+            this._updating = false;
+        }
+
+        if (needRestart) {
+            this._am.setEventCallback(null!);
+            
+            // Prepend the manifest's search path
+            var searchPaths = native.fileUtils.getSearchPaths();
+            var newPaths = this._am.getLocalManifest().getSearchPaths();
+            console.log(JSON.stringify(newPaths));
+            Array.prototype.unshift.apply(searchPaths, newPaths);
+            // This value will be retrieved and appended to the default search path during game startup,
+            // please refer to samples/js-tests/main.js for detailed usage.
+            // !!! Re-add the search paths in main.js is very important, otherwise, new scripts won't take effect.
+            localStorage.setItem('HotUpdateSearchPaths', JSON.stringify(searchPaths));
+            native.fileUtils.setSearchPaths(searchPaths);
+
+            // restart game.
+            setTimeout(() => {
+                game.restart();                
+            }, 1000)
         }
     }
 

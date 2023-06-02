@@ -3,7 +3,7 @@
   "platform": "windows",
   "buildPath": "project://build",
   "debug": true,
-  "md5Cache": true,
+  "md5Cache": false,
   "skipCompressTexture": false,
   "sourceMaps": false,
   "polyfills": {
