@@ -1,10 +1,15 @@
-import { _decorator, Component, director, Node } from 'cc';
+import { _decorator, Component, director, Label, Node } from 'cc';
+import { Tools } from '../../src/Tools';
 const { ccclass, property } = _decorator;
 
 @ccclass('Game')
 export class Game extends Component {
-    start() {
+    @property(Label)
+    ver: Label = null;
 
+    start() {
+        let localVersion = Tools.getLocalVersion('game3');        
+        this.ver.string = localVersion;
     }
 
     update(deltaTime: number) {

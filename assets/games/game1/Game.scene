@@ -754,6 +754,9 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "ver": {
+      "__id__": 10
+    },
     "_id": "d3MXRSIXZJgJcgjfBMO7cI"
   },
   {
