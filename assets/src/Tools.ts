@@ -31,6 +31,8 @@ export class Tools {
             // 读取内置版本
             return localVersion;
         }
+
+        return '';
     }
 
     /**

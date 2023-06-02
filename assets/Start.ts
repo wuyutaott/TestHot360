@@ -2,6 +2,7 @@ import { _decorator, Component, director, Label, native, Node, sys } from 'cc';
 import { Tools } from './src/Tools';
 import Http from './src/Http';
 import HotUpdate from './src/HotUpdate';
+import { Global } from './src/Global';
 const { ccclass, property } = _decorator;
 
 @ccclass('Main')
@@ -25,6 +26,8 @@ export class Main extends Component {
             }
 
             let changelog = await this.reqChangeLog();
+            Global.Ins.ChangeLog = changelog;
+
             let updateFlag = this.checkHotUpdate('main', changelog);
             if (updateFlag) {
                 // 需要更新大厅                
