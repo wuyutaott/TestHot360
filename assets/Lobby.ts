@@ -15,5 +15,9 @@ export class Main extends Component {
     update(deltaTime: number) {
         
     }
+
+    onGameClick(btn, id) {
+        console.log('id = ', id);
+    }
 }
 
