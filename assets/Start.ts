@@ -1,4 +1,4 @@
-import { _decorator, Component, director, native, Node, sys } from 'cc';
+import { _decorator, Component, director, Label, native, Node, sys } from 'cc';
 import { Tools } from './src/Tools';
 import Http from './src/Http';
 import HotUpdate from './src/HotUpdate';
@@ -6,19 +6,34 @@ const { ccclass, property } = _decorator;
 
 @ccclass('Main')
 export class Main extends Component {
+
+    @property(Node)
+    updateLayer: Node = null;
+
+    @property(Label)
+    updateTip: Label = null;
+
     async start() {
         if (sys.isNative) {
             let path = native.fileUtils.getWritablePath();
             console.log('WritablePath = ', path);
 
+            let searchPaths = native.fileUtils.getSearchPaths();
+            console.log('searchPaths = ');
+            for (let i = 0; i < searchPaths.length; i++) {
+                console.log(`${i}: ${searchPaths[i]}`);
+            }
+
             let changelog = await this.reqChangeLog();
             let updateFlag = this.checkHotUpdate('main', changelog);
             if (updateFlag) {
                 // 需要更新大厅                
-                // this.doHotUpdate();
+                this.updateLayer.active = true;
+                this.updateTip.string = `发现新版本 ${changelog['main'].ver}`;
             } else {
                 // 已经是最新版本
                 director.loadScene('Lobby');
+                this.updateLayer.active = false;
             }
         }
         else {

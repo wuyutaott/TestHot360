@@ -1,10 +1,15 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Label, Node } from 'cc';
+import { Tools } from './src/Tools';
 const { ccclass, property } = _decorator;
 
 @ccclass('Main')
 export class Main extends Component {
-    start() {
+    @property(Label)
+    ver: Label = null;
 
+    start() {
+        let localVersion = Tools.getLocalVersion('main');        
+        this.ver.string = localVersion;
     }
 
     update(deltaTime: number) {
