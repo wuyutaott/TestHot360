@@ -121,8 +121,7 @@ export class Main extends Component {
                     break;
             }
         })
-        hotUpdate.hotUpdate();
-        // hotUpdate.am.checkUpdate();
+        hotUpdate.hotUpdate();        
     }
 }
 

@@ -2,8 +2,8 @@ import { _decorator, Component, director, Label, Node } from 'cc';
 import { Tools } from '../../src/Tools';
 const { ccclass, property } = _decorator;
 
-@ccclass('Game')
-export class Game extends Component {
+@ccclass('Game3')
+export class Game3 extends Component {
     @property(Label)
     ver: Label = null;
 

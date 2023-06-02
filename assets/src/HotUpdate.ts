@@ -157,9 +157,11 @@ export default class HotUpdate extends EventTarget {
             native.fileUtils.setSearchPaths(searchPaths);
 
             // restart game.
-            setTimeout(() => {
-                game.restart();                
-            }, 1000)
+            if (this._name == 'main') {
+                setTimeout(() => {
+                    game.restart();                
+                }, 1000)
+            }            
         }
     }
 
