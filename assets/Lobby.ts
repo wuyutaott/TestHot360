@@ -25,19 +25,31 @@ export class Main extends Component {
     }
 
     onGameClick(btn, index) {
-        let gameItem = this.gameItems[index];
-        console.log(gameItem.state);
-        // let bundleName = `game${id}`;
-        // assetManager.loadBundle(bundleName, (err: Error, bundle: AssetManager.Bundle) => {
-        //     if (err)
-        //         return console.error(err);
-        //     bundle.loadScene('Game', (err: Error, sceneAsset: SceneAsset) => {
-        //         if (err) {                    
-        //             return console.error(err);
-        //         }                    
-        //         director.runScene(sceneAsset);
-        //     })            
-        // })
+        let gameItem = this.gameItems[index]; 
+        let gameId = gameItem.gameId;
+        let info = Game_INFO[gameId];               
+
+        switch (gameItem.state) {
+            case GameState.OK:
+                {
+                    let bundleName = info.bundleName;
+                    assetManager.loadBundle(bundleName, (err: Error, bundle: AssetManager.Bundle) => {
+                        if (err)
+                            return console.error(err);
+                        bundle.loadScene('Game', (err: Error, sceneAsset: SceneAsset) => {
+                            if (err) {                    
+                                return console.error(err);
+                            }                    
+                            director.runScene(sceneAsset);
+                        })            
+                    }) 
+                }
+                break;
+            case GameState.NEW_VERSION:
+                break;
+            case GameState.UNINSTALL:
+                break;
+        }
     }
 
     initGameItem() {        
@@ -45,12 +57,12 @@ export class Main extends Component {
         for (let i = 0; i < gameIds.length; i++) {
             let gameId = gameIds[i];
             let info = Game_INFO[gameId];
-            let bundleName = info.bundle;            
+            let bundleName = info.bundleName;
             let state = this.checkGameState(bundleName);
             console.log(`${bundleName} - ${state}`);
 
-            let gameItem = this.gameItems[i];
-            console.log(gameItem);
+            let gameItem = this.gameItems[i];    
+            gameItem.setGameId(gameId);        
             gameItem.setState(state);                      
         }
     }

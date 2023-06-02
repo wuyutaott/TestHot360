@@ -4,10 +4,15 @@ const { ccclass, property } = _decorator;
 
 @ccclass('GameItem')
 export class GameItem extends Component {
+    gameId: number;
     state: GameState;
 
     start() {
 
+    }
+
+    setGameId(gameId: number) {
+        this.gameId = gameId;
     }
 
     setState(state: GameState) {
