@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, AssetManager, assetManager, Component, director, Label, Node, Prefab, Scene, SceneAsset } from 'cc';
 import { Tools } from './src/Tools';
 const { ccclass, property } = _decorator;
 
@@ -16,8 +16,18 @@ export class Main extends Component {
         
     }
 
-    onGameClick(btn, id) {
-        console.log('id = ', id);
+    onGameClick(btn, id) {            
+        let bundleName = `game${id}`;
+        assetManager.loadBundle(bundleName, (err: Error, bundle: AssetManager.Bundle) => {
+            if (err)
+                return console.error(err);
+            bundle.loadScene('Game', (err: Error, sceneAsset: SceneAsset) => {
+                if (err) {                    
+                    return console.error(err);
+                }                    
+                director.runScene(sceneAsset);
+            })            
+        })
     }
 }
 
