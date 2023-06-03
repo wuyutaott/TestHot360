@@ -46,9 +46,19 @@ export default class HotUpdate extends EventTarget {
         // 缓存manifest的url
         let cacheManifestUrl = `${native.fileUtils.getWritablePath()}${name}/project.manifest`;
         console.log('[update] cache manifest url = ' + cacheManifestUrl);
-        
+
         let content = '';
-        if (!native.fileUtils.isFileExist(cacheManifestUrl) && !native.fileUtils.isFileExist(localManifestUrl)) {                    
+        if (native.fileUtils.isFileExist(cacheManifestUrl)) {
+            console.log('read project.manifest from cache');
+            content = native.fileUtils.getStringFromFile(cacheManifestUrl);
+            native.fileUtils.writeStringToFile(content, cacheManifestUrl);
+        }
+        else if (native.fileUtils.isFileExist(localManifestUrl)) {
+            content = native.fileUtils.getStringFromFile(localManifestUrl);
+            native.fileUtils.createDirectory(`${native.fileUtils.getWritablePath()}${name}`);
+            native.fileUtils.writeStringToFile(content, cacheManifestUrl);
+        }
+        else {
             console.log('[update] create empty project.manifest');
             let hot = `${HOT_UPDATE_ADDR}`; // 热更新地址
             content = JSON.stringify({
